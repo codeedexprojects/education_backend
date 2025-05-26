@@ -36,5 +36,5 @@ my-express-app/
 ├── .gitignore              # Git ignore file
 ├── package.json            # Dependencies and scripts
 ├── README.md               # Project documentation
-└── server.js               # Entry point to start the server
+└── index.js               # Entry point to start the server
 ```
