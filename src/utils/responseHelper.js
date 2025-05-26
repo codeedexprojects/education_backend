@@ -1,4 +1,4 @@
-const sendResponse = (res, statusCode, message, data = null) => {
+const sendResponse = (res, statusCode, message, data = undefined) => {
     res.status(statusCode).json({
       success: statusCode < 400,
       message,
