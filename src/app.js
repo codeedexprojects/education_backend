@@ -11,11 +11,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
-app.get('/health', (req, res) => {
-    res.send('OK')
-})
+// Routes 
+const collegeRoute = require('./features/College/collegeRoute')
 
+app.use('/college', collegeRoute)
 
 // Error handling middleware
 app.use(errorMiddleware);
