@@ -1,4 +1,4 @@
-const College  = require('./collegeModel')
+const College = require('./CollegeModel');
 exports.createCollege = async (data) => {
   const newCollege = new College(data);
   return await newCollege.save();

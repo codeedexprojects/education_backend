@@ -18,8 +18,8 @@ const collegeSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ['University', 'College', 'Community College', 'Technical Institute', 'Research Institute'],
-      required: [true, 'College type is required'],
+      requird: [true, 'College type is required'],
+       trim: true,
     },
     address: {
       street: { type: String, required: true, trim: true },
