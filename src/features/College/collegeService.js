@@ -4,8 +4,8 @@ exports.createCollege = async (data) => {
   return await newCollege.save();
 };
 
-exports.getAllColleges = async () => {
-  return await College.find();
+exports.getAllColleges = async (filters = {}) => {
+  return College.find(filters);
 };
 
 exports.getCollegeById = async (id) => {

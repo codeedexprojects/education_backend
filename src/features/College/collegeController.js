@@ -1,17 +1,31 @@
 const collegeService = require('./collegeService');
 const { sendResponse } = require('../../utils/responseHelper');
 
-exports.addCollege = async (req, res) => {
+exports.addCollege = async (req, res, next) => {
   const college = await collegeService.createCollege(req.body);
   return sendResponse(res, 201, 'College added successfully', college);
 };
 
-exports.getAllColleges = async (req, res) => {
-  const colleges = await collegeService.getAllColleges();
+exports.getAllColleges = async (req, res, next) => {
+  const filters = {};
+
+  if (req.query.type) {
+    filters.type = req.query.type;
+  }
+
+  if (req.query.country) {
+    filters['address.country'] = req.query.country;
+  }
+
+  if (req.query.accreditation) {
+    filters['accreditation.body'] = req.query.accreditation;
+  }
+
+  const colleges = await collegeService.getAllColleges(filters);
   return sendResponse(res, 200, 'Colleges retrieved', colleges);
 };
 
-exports.getCollegeById = async (req, res) => {
+exports.getCollegeById = async (req, res, next) => {
   const college = await collegeService.getCollegeById(req.params.id);
   if (!college) {
     return sendResponse(res, 404, 'College not found');
@@ -19,7 +33,7 @@ exports.getCollegeById = async (req, res) => {
   return sendResponse(res, 200, 'College retrieved', college);
 };
 
-exports.updateCollege = async (req, res) => {
+exports.updateCollege = async (req, res, next) => {
   const updated = await collegeService.updateCollege(req.params.id, req.body);
   if (!updated) {
     return sendResponse(res, 404, 'College not found');
@@ -27,7 +41,7 @@ exports.updateCollege = async (req, res) => {
   return sendResponse(res, 200, 'College updated successfully', updated);
 };
 
-exports.deleteCollege = async (req, res) => {
+exports.deleteCollege = async (req, res, next) => {
   const deleted = await collegeService.deleteCollege(req.params.id);
   if (!deleted) {
     return sendResponse(res, 404, 'College not found');
