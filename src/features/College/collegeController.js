@@ -51,3 +51,12 @@ exports.deleteCollege = async (id) => {
   return college;
 };
 
+exports.compareColleges = async(req, res) => {
+  const { collegeIds } = req.body;
+  if (!Array.isArray(collegeIds) || collegeIds.length < 2) {
+    return sendResponse(res, 400, "At least two college IDs are required for comparison");
+  }
+
+  const colleges = await collegeService.getCollegesByIds(collegeIds);
+  return sendResponse(res, 200, "Colleges retrieved for comparison", colleges);
+}

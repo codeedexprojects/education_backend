@@ -74,3 +74,28 @@ exports.updateCollege = async (id, updateData) => {
 exports.deleteCollege = async (id) => {
   return await College.findByIdAndDelete(id);
 };
+
+exports.getCollegesByIds = async (collegeIds) => {
+  return await College.find(
+    { _id: { $in: collegeIds } },
+    'name location rating   ' 
+  );
+};
+exports.getCollegesByIds = async (collegeIds) => {
+  const colleges = await College.find({ _id: { $in: collegeIds } });
+
+  const collegeData = await Promise.all(
+    colleges.map(async (college) => {
+      const facilities = await Facility.find({ collegeId: college._id });
+      const programs = await Program.find({ collegeId: college._id });
+
+      return {
+        ...college.toObject(),
+        facilities,
+        programs,
+      };
+    })
+  );
+
+  return collegeData;
+};

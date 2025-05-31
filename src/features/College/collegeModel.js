@@ -18,7 +18,7 @@ const collegeSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      requird: [true, 'College type is required'],
+      required: [true, 'College type is required'],
        trim: true,
     },
     address: {

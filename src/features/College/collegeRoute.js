@@ -15,4 +15,9 @@ router
   .patch(collegeController.updateCollege)
   .delete(collegeController.deleteCollege);
 
+// Compare
+router
+  .route('/compare')
+  .post(collegeController.compareColleges)
+
 module.exports = router;
