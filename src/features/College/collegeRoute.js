@@ -12,7 +12,7 @@ router
 router
   .route('/:id')
   .get(collegeController.getCollegeById)
-  .put(collegeController.updateCollege)
+  .patch(collegeController.updateCollege)
   .delete(collegeController.deleteCollege);
 
 module.exports = router;
