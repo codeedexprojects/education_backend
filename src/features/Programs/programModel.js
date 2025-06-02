@@ -17,15 +17,10 @@ const programSchema = new mongoose.Schema(
       min: [1, 'Minimum duration must be at least 1 year'],
       required: [true, 'Duration is required'],
     },
-    collegeId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'College',
-      required: true,
-    },
     description: {
       type: String,
       trim: true,
-    },
+    }
   },
   { timestamps: true }
 );
