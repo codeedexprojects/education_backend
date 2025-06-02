@@ -11,6 +11,10 @@ const collegeSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    nationalRanking: {
+      type: Number,
+      min: [1, 'Ranking must be a positive number'],
+    },
     establishedYear: {
       type: Number,
       required: [true, 'Established year is required'],
@@ -19,14 +23,16 @@ const collegeSchema = new mongoose.Schema(
     type: {
       type: String,
       required: [true, 'College type is required'],
-       trim: true,
+      trim: true,
     },
     address: {
       street: { type: String, required: true, trim: true },
       city: { type: String, required: true, trim: true },
+      district: { type: String, trim: true },
       state: { type: String, required: true, trim: true },
       country: { type: String, required: true, trim: true },
       postalCode: { type: String, trim: true },
+      googleMapsLink: { type: String, trim: true },
     },
     phone: {
       type: String,
@@ -49,16 +55,11 @@ const collegeSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    images: [
-      {
-        type: String, 
-        trim: true,
-      }
-    ],
+    images: [{ type: String, trim: true }],
     accreditation: {
-      body: { type: String, trim: true }, 
+      body: { type: String, trim: true },
       certificateNumber: { type: String, trim: true },
-      validTill: { type: Date }
+      validTill: { type: Date },
     },
     description: {
       type: String,
@@ -69,6 +70,33 @@ const collegeSchema = new mongoose.Schema(
       type: String,
       enum: ['Active', 'Inactive', 'Blacklisted'],
       default: 'Active',
+    },
+    placementRating: {
+      type: Number,
+      min: 1,
+      max: 5,
+    },
+    facilities: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Facility',
+      }
+    ],
+    programs: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Program',
+      }
+    ],
+    hostel: {
+      boysHostel: {
+        available: { type: Boolean, default: false },
+        numberOfRooms: { type: Number, default: 0 },
+      },
+      girlsHostel: {
+        available: { type: Boolean, default: false },
+        numberOfRooms: { type: Number, default: 0 },
+      },
     },
   },
   { timestamps: true }
