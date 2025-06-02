@@ -12,11 +12,6 @@ const facilitySchema = new mongoose.Schema(
       enum: ['Academic', 'Hostel', 'Sports', 'Medical', 'Transport', 'Other'],
       default: 'Other',
     },
-    collegeId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'College',
-      required: true,
-    },
     description: {
       type: String,
       trim: true,

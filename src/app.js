@@ -13,8 +13,11 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes 
 const collegeRoute = require('./features/College/collegeRoute')
+const facilityRoute = require('./features/Facilities/facilityRoute')
 
 app.use('/college', collegeRoute)
+app.use('/facilities', facilityRoute)
+
 
 // Error handling middleware
 app.use(errorMiddleware);
