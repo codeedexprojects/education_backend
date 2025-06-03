@@ -1,6 +1,5 @@
 const Student = require('../Admission/studentModel');
 const PDFDocument = require('pdfkit');
-const Program = require('../College/programModel')
 
 exports.createStudent = (studentData) => {
   const student = new Student(studentData);

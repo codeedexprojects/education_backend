@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const College = require('./collegeModel');
-const Program = require('./programModel');
-const Facility = require('./facilityModel');
+const Program = require('../Programs/programModel');
+const Facility = require('../Facilities/facilityModel');
 
 
 exports.createCollege = async (collegeData) => {
