@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const College = require('./CollegeModel');
+const College = require('./collegeModel');
 const Program = require('./programModel');
 const Facility = require('./facilityModel');
 
