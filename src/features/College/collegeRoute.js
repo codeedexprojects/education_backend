@@ -2,19 +2,22 @@ const express = require('express');
 const router = express.Router();
 const collegeController = require('./collegeController');
 
-// View all colleges
-router.get('/', collegeController.getAllColleges);
+// View all colleges and Add a new college
+router
+  .route('/')
+  .get(collegeController.getAllColleges)
+  .post(collegeController.addCollege);
 
-// Create a new college
-router.post('/', collegeController.addCollege);
+// Get, Update, and Delete a college by ID
+router
+  .route('/:id')
+  .get(collegeController.getCollegeById)
+  .patch(collegeController.updateCollege)
+  .delete(collegeController.deleteCollege);
 
-// Get college by ID
-router.get('/:id', collegeController.getCollegeById);
-
-// Update college by ID
-router.put('/:id', collegeController.updateCollege);
-
-// Delete college by ID
-router.delete('/:id', collegeController.deleteCollege);
+// Compare
+router
+  .route('/compare')
+  .post(collegeController.compareColleges)
 
 module.exports = router;

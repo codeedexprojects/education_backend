@@ -12,9 +12,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes 
+const collegeRoutes = require('./features/College/collegeRoute');
+const seatRoutes = require('./features/Seat/seatRoute')
+const reviewRoutes= require('./features/Review/reviewRoute')
 const collegeRoute = require('./features/College/collegeRoute')
 const facilityRoute = require('./features/Facilities/facilityRoute')
 
+app.use('/colleges', collegeRoutes)
+app.use('/seat-availability', seatRoutes)
+app.use('/reviews', reviewRoutes)
 app.use('/college', collegeRoute)
 app.use('/facilities', facilityRoute)
 
