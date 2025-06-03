@@ -84,8 +84,35 @@ const collegeSchema = new mongoose.Schema(
     ],
     programs: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Program',
+        program: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Program',
+          required: true
+        },
+        annualFees: {
+          type: Number,
+          required: true,
+          min: [0, 'Annual fees must be a positive number']
+        },
+        eligibility: {
+          type: String,
+          required: [true, 'Eligibility is required'],
+          trim: true,
+        },
+        modeOfStudy: {
+          type: String,
+          enum: ['Full-Time', 'Part-Time', 'Distance', 'Online', 'Hybrid'],
+          required: [true, 'Mode of study is required'],
+        },
+        seatCount: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Seat',
+        },
+        courseDuration: {
+          type: String,
+          required: [true, 'Course duration is required'],
+          trim: true,
+        }
       }
     ],
     hostel: {
