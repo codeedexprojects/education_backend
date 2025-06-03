@@ -15,10 +15,14 @@ app.use(express.urlencoded({ extended: true }));
 const collegeRoutes = require('./features/College/collegeRoute');
 const seatRoutes = require('./features/Seat/seatRoute')
 const reviewRoutes= require('./features/Review/reviewRoute')
+const programRoutes = require('./features/Programs/programRoute')
+
 
 app.use('/colleges', collegeRoutes)
 app.use('/seat-availability', seatRoutes)
 app.use('/reviews', reviewRoutes)
+app.use('/programs', programRoutes)
+
 
 // Error handling middleware
 app.use(errorMiddleware);
