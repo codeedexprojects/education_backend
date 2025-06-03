@@ -1,4 +1,5 @@
-const Review = require('./reviewModel');
+const Review = require('../Review/reviewModel');
+const Student = require('../Admission/studentModel')
 
 exports.getAllReviews = async (status) => {
   const filter = {};

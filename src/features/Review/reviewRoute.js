@@ -8,11 +8,11 @@ router
 
 router
   .route('/:id')
-  .put(reviewController.updateReview)    
+  .put(reviewController.editReview)    
   .delete(reviewController.deleteReview); 
 
 router
   .route('/:id/verified')
-  .patch(reviewController.verifyReview); 
+  .patch(reviewController.approveReview); 
 
 module.exports = router;
