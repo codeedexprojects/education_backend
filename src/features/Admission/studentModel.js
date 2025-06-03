@@ -34,6 +34,13 @@ const studentSchema = new mongoose.Schema(
       enum: ['Male', 'Female', 'Other'],
       required: true
     },
+
+    nationality: {
+      type: String,
+      required: [true, 'Nationality is required'],
+      trim: true
+    },
+
     address: {
       street: { type: String, required: true, trim: true },
       city: { type: String, required: true, trim: true },
@@ -41,13 +48,66 @@ const studentSchema = new mongoose.Schema(
       country: { type: String, required: true, trim: true },
       postalCode: { type: String, trim: true }
     },
-    academicDetails: {
-      highestQualification: { type: String, required: true, trim: true },
-      percentage: { type: Number, required: true, min: 0, max: 100 },
-      yearOfPassing: { type: Number, required: true },
-      certificate: { type: String, required: true, trim: true },
-      boardOrUniversity: { type: String, required: true, trim: true }
+
+    highSchoolName: {
+      type: String,
+      required: [true, 'High School Name is required'],
+      trim: true
     },
+
+    graduationYear: {
+      type: Number,
+      required: [true, 'Graduation Year is required'],
+      min: [1900, 'Graduation year must be after 1900'],
+      max: [new Date().getFullYear(), 'Graduation year cannot be in the future']
+    },
+
+    gpa: {
+      type: Number,
+      required: [true, 'GPA is required'],
+      min: 0,
+      max: 4
+    },
+
+    satScore: {
+      type: Number,
+      min: 400,
+      max: 1600,
+      default: null
+    },
+
+    actScore: {
+      type: Number,
+      min: 1,
+      max: 36,
+      default: null
+    },
+
+    essays: {
+      personalStatement: {
+        type: String,
+        maxlength: [3000, 'Personal Statement cannot exceed 3000 characters'], 
+        required: [true, 'Personal Statement is required']
+      },
+      whyThisCollege: {
+        type: String,
+        maxlength: [1800, 'Why This College essay cannot exceed 1800 characters'], 
+        required: [true, 'Why This College essay is required']
+      }
+    },
+
+    achievementsAwards: {
+      type: String,
+      trim: true,
+      default: ''
+    },
+
+    extracurricularActivities: {
+      type: String,
+      trim: true,
+      default: ''
+    },
+
     appliedPrograms: [
       {
         collegeId: { type: mongoose.Schema.Types.ObjectId, ref: 'College' },
@@ -67,10 +127,12 @@ const studentSchema = new mongoose.Schema(
         }
       }
     ],
+
     profileImage: {
       type: String, 
       trim: true
     },
+
     status: {
       type: String,
       enum: ['Active', 'Inactive', 'Suspended'],
@@ -81,3 +143,4 @@ const studentSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model('Student', studentSchema);
+

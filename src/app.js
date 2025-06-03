@@ -15,10 +15,26 @@ app.use(express.urlencoded({ extended: true }));
 const collegeRoutes = require('./features/College/collegeRoute');
 const seatRoutes = require('./features/Seat/seatRoute')
 const reviewRoutes= require('./features/Review/reviewRoute')
+const programRoutes = require('./features/Programs/programRoute')
+const facilityRoute = require('./features/Facilities/facilityRoute')
+const admissionRoutes = require('./features/Admission/admissionRoute')
+
+
+
 
 app.use('/colleges', collegeRoutes)
 app.use('/seat-availability', seatRoutes)
 app.use('/reviews', reviewRoutes)
+app.use('/programs', programRoutes)
+app.use('/facilities', facilityRoute)
+app.use('/admissions', admissionRoutes)
+
+// Unknown Routes
+app.all(/.*/, (req, res, next) => {
+  const err = new Error(`Route ${req.originalUrl} not found`);
+  err.statusCode = 404;
+  next(err); 
+});
 
 // Error handling middleware
 app.use(errorMiddleware);
