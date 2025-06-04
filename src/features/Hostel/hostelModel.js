@@ -61,3 +61,4 @@ const hostelSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model('Hostel', hostelSchema);
+

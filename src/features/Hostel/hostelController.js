@@ -3,11 +3,9 @@ const { sendResponse } = require('../../utils/responseHelper');
 
 exports.addHostel = async (req, res, next) => {
   const data = req.body;
-  const photos = req.files?.map((file) => file.filename) || [];
-  console.log(photos);
-  
+  const photos = req.files?.map((file) => file.filename) || [];  
 
-  const hostel = await hostelService.createHostel(data, photos);
+  const hostel = await hostelService.addHostel(data, photos);
   return sendResponse(res, 201, 'Hostel added successfully', hostel);
 };
 

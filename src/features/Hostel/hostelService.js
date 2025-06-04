@@ -1,8 +1,17 @@
 const Hostel = require('./hostelModel');
 const Photo = require('./hostelPhotosModel');
+const crypto = require('crypto');
+const HostelCode = require('./hostelCodeModel')
 
-exports.createHostel = async (data, photoFilenames) => {
+
+exports.addHostel = async (data, photoFilenames) => {
   const hostel = await Hostel.create(data);
+  const uniqueCode = `H-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`;
+
+    await HostelCode.create({
+        code:uniqueCode,
+        hostelId:hostel._id
+    })
 
   if (photoFilenames.length) {
     const photos = photoFilenames.map((filename) => ({
