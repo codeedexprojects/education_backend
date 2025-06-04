@@ -54,7 +54,9 @@ exports.getAllColleges = async (filters = {}) => {
 };
 
 exports.getCollegeById = async (id) => {
-  return await College.findById(id);
+  return await College.findById(id)
+  .populate('programs')
+  .populate('facilities')
 };
 
 exports.updateCollege = async (id, updateData) => {
