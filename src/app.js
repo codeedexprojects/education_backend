@@ -18,6 +18,7 @@ const reviewRoutes= require('./features/Review/reviewRoute')
 const programRoutes = require('./features/Programs/programRoute')
 const facilityRoute = require('./features/Facilities/facilityRoute')
 const admissionRoutes = require('./features/Admission/admissionRoute')
+const hostelRoutes = require('./features/Hostel/hostelRoute')
 
 
 
@@ -28,6 +29,7 @@ app.use('/reviews', reviewRoutes)
 app.use('/programs', programRoutes)
 app.use('/facilities', facilityRoute)
 app.use('/admissions', admissionRoutes)
+app.use('/hostels', hostelRoutes)
 
 // Unknown Routes
 app.all(/.*/, (req, res, next) => {

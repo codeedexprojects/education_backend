@@ -43,11 +43,19 @@ const hostelSchema = new mongoose.Schema(
       latitude: { type: Number, required: true, index: true },
       longitude: { type: Number, required: true, index: true },
     },
-    code: {
-      type: String,
-      unique: true,
-      required: true,
-    },
+    contact: {
+      phone: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      email: {
+        type: String,
+        required: true,
+        trim: true,
+        lowercase: true,
+      }
+    }
   },
   { timestamps: true }
 );
