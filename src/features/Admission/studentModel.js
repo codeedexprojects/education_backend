@@ -2,44 +2,24 @@ const mongoose = require('mongoose');
 
 const studentSchema = new mongoose.Schema(
   {
-    firstName: {
-      type: String,
-      required: [true, 'First name is required'],
-      trim: true
-    },
-    lastName: {
-      type: String,
-      required: [true, 'Last name is required'],
-      trim: true
-    },
+    firstName: { type: String, required: true, trim: true },
+    lastName: { type: String, required: true, trim: true },
     email: {
       type: String,
-      required: [true, 'Email is required'],
+      required: true,
       unique: true,
       lowercase: true,
       trim: true,
       match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email']
     },
-    phone: {
-      type: String,
-      required: [true, 'Phone number is required'],
-      trim: true
-    },
-    dateOfBirth: {
-      type: Date,
-      required: [true, 'Date of birth is required']
-    },
+    phone: { type: String, required: true, trim: true },
+    dateOfBirth: { type: Date, required: true },
     gender: {
       type: String,
       enum: ['Male', 'Female', 'Other'],
       required: true
     },
-
-    nationality: {
-      type: String,
-      required: [true, 'Nationality is required'],
-      trim: true
-    },
+    nationality: { type: String, required: true, trim: true },
 
     address: {
       street: { type: String, required: true, trim: true },
@@ -49,89 +29,54 @@ const studentSchema = new mongoose.Schema(
       postalCode: { type: String, trim: true }
     },
 
-    highSchoolName: {
-      type: String,
-      required: [true, 'High School Name is required'],
-      trim: true
-    },
+    // Academic Details
+    tenthPercentage: { type: Number, required: true, min: 0, max: 100 },
+    twelfthPercentage: { type: Number, required: true, min: 0, max: 100 },
+    entranceExam: { type: String, required: true },
+    entranceExamScore: { type: Number, required: true },
+    graduationPercentage: { type: Number, min: 0, max: 100 },
 
-    graduationYear: {
-      type: Number,
-      required: [true, 'Graduation Year is required'],
-      min: [1900, 'Graduation year must be after 1900'],
-      max: [new Date().getFullYear(), 'Graduation year cannot be in the future']
-    },
-
-    gpa: {
-      type: Number,
-      required: [true, 'GPA is required'],
-      min: 0,
-      max: 4
-    },
-
-    satScore: {
-      type: Number,
-      min: 400,
-      max: 1600,
-      default: null
-    },
-
-    actScore: {
-      type: Number,
-      min: 1,
-      max: 36,
-      default: null
-    },
-
-    essays: {
-      personalStatement: {
+    // Admission Details
+    appliedProgram: {
+      collegeId: { type: mongoose.Schema.Types.ObjectId, ref: 'College' },
+      programId: { type: mongoose.Schema.Types.ObjectId, ref: 'Program' },
+      academicYear: {
         type: String,
-        maxlength: [3000, 'Personal Statement cannot exceed 3000 characters'], 
-        required: [true, 'Personal Statement is required']
+        match: [/^\d{4}-\d{4}$/, 'Academic year must be in YYYY-YYYY format']
       },
-      whyThisCollege: {
+      modeOfStudy: {
         type: String,
-        maxlength: [1800, 'Why This College essay cannot exceed 1800 characters'], 
-        required: [true, 'Why This College essay is required']
+        enum: ['Online', 'Offline', 'Hybrid'],
+        required: true
+      },
+      status: {
+        type: String,
+        enum: ['Applied', 'Admitted', 'Rejected', 'Cancelled'],
+        default: 'Applied'
+      },
+      appliedDate: {
+        type: Date,
+        default: Date.now
       }
     },
-
-    achievementsAwards: {
+    paymentMethod: {
       type: String,
-      trim: true,
-      default: ''
+      enum: ['UPI', 'Bank Transfer', 'Card', 'Cash'],
     },
-
-    extracurricularActivities: {
+    paymentStatus: {
       type: String,
-      trim: true,
-      default: ''
+      enum: ['Pending', 'Paid', 'Failed'],
+      default: 'Pending'
+    },
+    documents: {
+      tenthMarksheet: { type: String, required: true },
+      twelfthMarksheet: { type: String, required: true },
+      aadharCard: { type: String, required: true },
+      photo: { type: String, required: true },
+      additionalDoc: { type: String } 
     },
 
-    appliedPrograms: [
-      {
-        collegeId: { type: mongoose.Schema.Types.ObjectId, ref: 'College' },
-        programId: { type: mongoose.Schema.Types.ObjectId, ref: 'Program' },
-        academicYear: {
-          type: String,
-          match: [/^\d{4}-\d{4}$/, 'Academic year must be in YYYY-YYYY format']
-        },
-        status: {
-          type: String,
-          enum: ['Applied', 'Admitted', 'Rejected', 'Cancelled'],
-          default: 'Applied'
-        },
-        appliedDate: {
-          type: Date,
-          default: Date.now
-        }
-      }
-    ],
-
-    profileImage: {
-      type: String, 
-      trim: true
-    },
+    profileImage: { type: String, trim: true },
 
     status: {
       type: String,
@@ -143,4 +88,3 @@ const studentSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model('Student', studentSchema);
-
