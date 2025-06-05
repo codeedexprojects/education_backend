@@ -10,7 +10,6 @@ exports.createCollege = async (collegeData) => {
 
   const programs = collegeData.programs || [];
 
-    // Create college without seat references
     const programsForCollege = programs.map(({ seatCount, ...rest }) => rest);
     const college = await College.create({
       ...collegeData,
@@ -19,7 +18,6 @@ exports.createCollege = async (collegeData) => {
 
     const collegeId = college._id;
 
-    // Create seat documents
     const seatDocs = await Promise.all(
       programs.map(async (program) => {
         const seat = await Seat.create({
@@ -44,18 +42,19 @@ exports.createCollege = async (collegeData) => {
       return found ? { ...prog.toObject(), seat: found.seatId } : prog;
     });
 
-    // Update college with seat references
     college.programs = updatedPrograms;
     await college.save();
 };
 
 exports.getAllColleges = async (filters = {}) => {
-  return College.find(filters);
+  return College.find(filters)
+  .populate('programs.program')
+  .populate('facilities')
 };
 
 exports.getCollegeById = async (id) => {
   return await College.findById(id)
-  .populate('programs')
+  .populate('programs.program')
   .populate('facilities')
 };
 
