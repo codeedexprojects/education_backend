@@ -14,4 +14,9 @@ router
   .put(upload.array('photos'), hostelController.updateHostel)
   .delete(hostelController.deleteHostel);
 
+
+router
+.route('/compare')
+.post(hostelController.compareHostels)
+
 module.exports = router;

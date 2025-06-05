@@ -37,3 +37,14 @@ exports.deleteHostel = async (req, res, next) => {
   if (!deleted) return sendResponse(res, 404, 'Hostel not found');
   return sendResponse(res, 200, 'Hostel deleted', deleted);
 };
+
+exports.compareHostels = async (req, res, next) => {
+  const { hostelIds } = req.body;
+
+  if (!Array.isArray(hostelIds) || hostelIds.length === 0) {
+    return sendResponse(res, 400, 'Hostel IDs are required');
+  }
+
+  const data = await hostelService.compareHostels(hostelIds);
+  return sendResponse(res, 200, 'Comparison data retrieved', data);
+};

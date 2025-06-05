@@ -43,6 +43,11 @@ const hostelSchema = new mongoose.Schema(
       latitude: { type: Number, required: true, index: true },
       longitude: { type: Number, required: true, index: true },
     },
+    distance: {
+      type: Number, 
+      required: true,
+      index: true
+    },
     contact: {
       phone: {
         type: String,
@@ -61,4 +66,3 @@ const hostelSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model('Hostel', hostelSchema);
-

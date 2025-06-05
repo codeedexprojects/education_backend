@@ -67,3 +67,24 @@ exports.deleteHostel = async (id) => {
   await Photo.deleteMany({ hostelId: id });
   return hostel;
 };
+
+exports.compareHostels = async (hostelIds) => {
+
+  const hostels = await Hostel.find({ _id: { $in: hostelIds } }).lean();
+  const hostelPhotos = await Photo.find({ hostelId: { $in: hostelIds } }).lean();
+
+  return hostels.map((hostel) => ({
+    id: hostel._id,
+    name: hostel.name,
+    rent: hostel.rent,
+    rating: hostel.safety_rating,
+    food: hostel.food,
+    gender: hostel.gender,
+    distance: hostel.distance || null, 
+    address: `${hostel.address.street}, ${hostel.address.city}, ${hostel.address.state}`,
+    location: hostel.location,
+    photos: hostelPhotos
+      .filter(p => p.hostelId.toString() === hostel._id.toString())
+      .map(p => p.url),
+  }));
+};
