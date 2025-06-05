@@ -1,16 +1,28 @@
 const Student = require('../Admission/studentModel');
 const PDFDocument = require('pdfkit');
-const Program = require('../College/programModel')
+const Program = require('../Programs/programModel')
+const crypto = require('crypto');
+const StudentCode = require('./studentCodeModel')
 
-exports.createStudent = (studentData) => {
-  const student = new Student(studentData);
-  return student.save();
+exports.createStudent = async (studentData) => {
+  const student = await Student.create(studentData);
+
+  const year = new Date().getFullYear().toString().slice(-2);
+  const random = crypto.randomBytes(2).toString('hex');
+  const studentCode = `S${year}-${random}`;
+
+  await StudentCode.create({
+    studentId: student._id,
+    studentCode,
+  });
+
+  return student;
 };
 
 exports.generateReceiptPDF = async (studentId) => {
   const student = await Student.findById(studentId)
-    .populate('appliedPrograms.collegeId', 'name')   // populating college name
-    .populate('appliedPrograms.programId', 'name');  // populating program name
+    .populate('appliedPrograms.collegeId', 'name')  
+    .populate('appliedPrograms.programId', 'name'); 
 
   if (!student) throw new Error('Student not found');
 

@@ -29,14 +29,12 @@ const studentSchema = new mongoose.Schema(
       postalCode: { type: String, trim: true }
     },
 
-    // Academic Details
     tenthPercentage: { type: Number, required: true, min: 0, max: 100 },
     twelfthPercentage: { type: Number, required: true, min: 0, max: 100 },
     entranceExam: { type: String, required: true },
     entranceExamScore: { type: Number, required: true },
     graduationPercentage: { type: Number, min: 0, max: 100 },
 
-    // Admission Details
     appliedProgram: {
       collegeId: { type: mongoose.Schema.Types.ObjectId, ref: 'College' },
       programId: { type: mongoose.Schema.Types.ObjectId, ref: 'Program' },
