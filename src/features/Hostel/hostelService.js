@@ -1,7 +1,7 @@
 const Hostel = require('./hostelModel');
 const Photo = require('./hostelPhotosModel');
 const crypto = require('crypto');
-const HostelCode = require('./hostelCodeModel')
+const HostelCode = require('./hostelCodeModel');
 
 
 exports.addHostel = async (data, photoFilenames) => {
@@ -86,5 +86,43 @@ exports.compareHostels = async (hostelIds) => {
     photos: hostelPhotos
       .filter(p => p.hostelId.toString() === hostel._id.toString())
       .map(p => p.url),
+  }));
+};
+
+exports.getMapData = async (filters = {}) => {
+  
+  const hostels = await Hostel.find(filters, {
+    name: 1,
+    rent: 1,
+    gender: 1,
+    food: 1,
+    safety_rating: 1,
+    distance: 1,
+    'address.street': 1,
+    'address.city': 1,
+    'address.state': 1,
+    latitude: 1,
+    longitude: 1,
+    'location.latitude': 1,
+    'location.longitude': 1
+  }).lean();
+
+  
+  return hostels.map(h => ({
+    name: h.name,
+    price: h.rent,
+    gender: h.gender,
+    food: h.food,
+    safety_rating: h.safety_rating,
+    distance: h.distance,
+    address: {
+      street: h.address?.street,
+      city: h.address?.city,
+      state: h.address?.state,
+    },
+    coordinates: {
+      lat: h.location.latitude,
+      lng: h.location.longitude
+    }
   }));
 };

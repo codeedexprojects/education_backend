@@ -48,3 +48,18 @@ exports.compareHostels = async (req, res, next) => {
   const data = await hostelService.compareHostels(hostelIds);
   return sendResponse(res, 200, 'Comparison data retrieved', data);
 };
+
+exports.getHostelMapData = async (req, res, next) => {  
+  const { rent, gender, food, safety_rating, distance } = req.query;
+
+  const filters = {};
+
+  if (rent) filters.rent = { $lte: Number(rent) };
+  if (gender) filters.gender = gender;
+  if (food) filters.food = food;
+  if (safety_rating) filters.safety_rating = { $gte: Number(safety_rating) };
+  if (distance) filters.distance = { $lte: Number(distance) };
+
+  const data = await hostelService.getMapData(filters);
+  return sendResponse(res, 200, 'Hostel map data retrieved', data);
+};

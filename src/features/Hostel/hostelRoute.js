@@ -9,6 +9,10 @@ router
   .get(hostelController.getAllHostels);
 
 router
+.route('/map-data')
+.get(hostelController.getHostelMapData);  
+
+router
   .route('/:id')
   .get(hostelController.getHostelById)
   .put(upload.array('photos'), hostelController.updateHostel)
@@ -18,5 +22,8 @@ router
 router
 .route('/compare')
 .post(hostelController.compareHostels)
+
+
+
 
 module.exports = router;
