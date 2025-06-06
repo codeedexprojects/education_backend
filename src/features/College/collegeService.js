@@ -1,13 +1,52 @@
 const mongoose = require('mongoose')
-const College = require('./CollegeModel');
-const Program = require('./programModel');
-const Facility = require('./facilityModel');
+const College = require('./collegeModel');
+const Program = require('../Programs/programModel');
+const Facility = require('../Facilities/facilityModel');
+const Seat = require('../Seat/seatModel')
+
 
 
 exports.createCollege = async (collegeData) => {
 
-  const college = await College.create(collegeData);
-  return college;
+  const programs = collegeData.programs || [];
+
+    // Create college without seat references
+    const programsForCollege = programs.map(({ seatCount, ...rest }) => rest);
+    const college = await College.create({
+      ...collegeData,
+      programs: programsForCollege,
+    });
+
+    const collegeId = college._id;
+
+    // Create seat documents
+    const seatDocs = await Promise.all(
+      programs.map(async (program) => {
+        const seat = await Seat.create({
+          collegeId: collegeId,
+          programId: program.program,
+          totalSeats: program.seatCount,
+          availableSeats: program.seatCount,
+          year:program.year,
+          reservedSeats: 0,
+        });
+
+        return {
+          programId: program.program,
+          seatId: seat._id,
+        };
+      })
+    );
+
+    // Attach seat._id to the matching program entry in college.programs
+    const updatedPrograms = college.programs.map((prog) => {
+      const found = seatDocs.find((s) => s.programId.toString() === prog.program.toString());
+      return found ? { ...prog.toObject(), seat: found.seatId } : prog;
+    });
+
+    // Update college with seat references
+    college.programs = updatedPrograms;
+    await college.save();
 };
 
 exports.getAllColleges = async (filters = {}) => {
@@ -15,7 +54,9 @@ exports.getAllColleges = async (filters = {}) => {
 };
 
 exports.getCollegeById = async (id) => {
-  return await College.findById(id);
+  return await College.findById(id)
+  .populate('programs')
+  .populate('facilities')
 };
 
 exports.updateCollege = async (id, updateData) => {
@@ -29,7 +70,14 @@ exports.updateCollege = async (id, updateData) => {
 
 
 exports.deleteCollege = async (id) => {
-  return await College.findByIdAndDelete(id);
+  const college = await College.findByIdAndDelete(id);
+  if (!college) return null;
+
+  await Program.deleteMany({ collegeId: id });
+  await Facility.deleteMany({ collegeId: id });
+  await Seat.deleteMany({ collegeId: id });
+
+  return college;
 };
 
 exports.getCollegesByIds = async (collegeIds) => {

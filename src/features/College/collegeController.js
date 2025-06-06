@@ -41,14 +41,12 @@ exports.updateCollege = async (req, res, next) => {
   return sendResponse(res, 200, 'College updated successfully', updated);
 };
 
-exports.deleteCollege = async (id) => {
-  const college = await College.findByIdAndDelete(id);
-  if (!college) return null;
-
-  await Program.deleteMany({ collegeId: id });
-  await Facility.deleteMany({ collegeId: id });
-
-  return college;
+exports.deleteCollege = async (req, res, next) => {
+  const deletedCollege = await collegeService.deleteCollege(req.params.id);
+  if (!deletedCollege) {
+    return sendResponse(res, 404, 'College not found');
+  }
+  return sendResponse(res, 200, 'College deleted successfully', deletedCollege);
 };
 
 exports.compareColleges = async(req, res) => {

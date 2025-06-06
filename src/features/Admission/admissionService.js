@@ -19,10 +19,11 @@ exports.createStudent = async (studentData) => {
   return student;
 };
 
+
 exports.generateReceiptPDF = async (studentId) => {
   const student = await Student.findById(studentId)
-    .populate('appliedPrograms.collegeId', 'name')  
-    .populate('appliedPrograms.programId', 'name'); 
+    .populate('appliedPrograms.collegeId', 'name')   // populating college name
+    .populate('appliedPrograms.programId', 'name');  // populating program name
 
   if (!student) throw new Error('Student not found');
 
