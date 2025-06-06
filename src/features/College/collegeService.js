@@ -10,6 +10,7 @@ exports.createCollege = async (collegeData) => {
 
   const programs = collegeData.programs || [];
 
+    // Create college without seat references
     const programsForCollege = programs.map(({ seatCount, ...rest }) => rest);
     const college = await College.create({
       ...collegeData,
@@ -18,6 +19,7 @@ exports.createCollege = async (collegeData) => {
 
     const collegeId = college._id;
 
+    // Create seat documents
     const seatDocs = await Promise.all(
       programs.map(async (program) => {
         const seat = await Seat.create({
@@ -42,28 +44,36 @@ exports.createCollege = async (collegeData) => {
       return found ? { ...prog.toObject(), seat: found.seatId } : prog;
     });
 
+    // Update college with seat references
     college.programs = updatedPrograms;
     await college.save();
 };
 
 exports.getAllColleges = async (filters = {}) => {
-  return College.find(filters)
-  .populate('programs.program')
-  .populate('facilities')
+  return College.find(filters);
 };
 
 exports.getCollegeById = async (id) => {
   return await College.findById(id)
-  .populate('programs.program')
+  .populate('programs')
   .populate('facilities')
 };
 
 exports.updateCollege = async (id, updateData) => {
+  const college = await College.findById(id);
+  if (!college) return null;
 
+  const existingImages = college.images || [];
+  const newImages = updateData.images || [];
 
-  const updatedCollege = await College.findByIdAndUpdate(id, updateData, { new: true });
-  
-  if (!updatedCollege) return null;
+  const mergedImages = [...existingImages, ...newImages];
+
+  updateData.images = mergedImages;
+
+  const updatedCollege = await College.findByIdAndUpdate(id, updateData, {
+    new: true,
+  });
+
   return updatedCollege;
 };
 

@@ -2,6 +2,10 @@ const collegeService = require('./collegeService');
 const { sendResponse } = require('../../utils/responseHelper');
 
 exports.addCollege = async (req, res, next) => {
+  if (req.files && req.files.length > 0) {
+    req.body.images = req.files.map(file => file.path); // array of paths
+  }
+
   const college = await collegeService.createCollege(req.body);
   return sendResponse(res, 201, 'College added successfully', college);
 };
@@ -34,12 +38,19 @@ exports.getCollegeById = async (req, res, next) => {
 };
 
 exports.updateCollege = async (req, res, next) => {
+  
+  if (req.files && req.files.length > 0) {
+    req.body.images = req.files.map(file => file.path);
+  }
+
   const updated = await collegeService.updateCollege(req.params.id, req.body);
   if (!updated) {
     return sendResponse(res, 404, 'College not found');
   }
+
   return sendResponse(res, 200, 'College updated successfully', updated);
 };
+
 
 exports.deleteCollege = async (req, res, next) => {
   const deletedCollege = await collegeService.deleteCollege(req.params.id);
