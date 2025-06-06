@@ -55,7 +55,7 @@ const collegeSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    images: [{ type: String, trim: true }],
+    images: [{ type: String, trim: true }], 
     accreditation: {
       body: { type: String, trim: true },
       certificateNumber: { type: String, trim: true },
@@ -87,12 +87,12 @@ const collegeSchema = new mongoose.Schema(
         program: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Program',
-          required: true
+          required: true,
         },
         annualFees: {
           type: Number,
           required: true,
-          min: [0, 'Annual fees must be a positive number']
+          min: [0, 'Annual fees must be a positive number'],
         },
         eligibility: {
           type: String,
