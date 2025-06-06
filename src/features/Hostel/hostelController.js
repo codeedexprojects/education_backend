@@ -63,3 +63,20 @@ exports.getHostelMapData = async (req, res, next) => {
   const data = await hostelService.getMapData(filters);
   return sendResponse(res, 200, 'Hostel map data retrieved', data);
 };
+
+
+exports.mapStudentToHostel = async (req, res, next) => {
+  const { studentCode, hostelCode } = req.body;
+
+  if (!studentCode || !hostelCode) {
+    return sendResponse(res, 400, 'Both studentCode and hostelCode are required');
+  }
+
+  const mapping = await hostelService.mapStudentToHostel(studentCode, hostelCode);
+  return sendResponse(res, 201, 'Student mapped to hostel successfully', mapping);
+};
+
+exports.getAllMappings = async (req, res, next) => {
+  const mappings = await hostelService.getAllStudentMappings();
+  return sendResponse(res, 200, 'All student mappings retrieved', mappings);
+};

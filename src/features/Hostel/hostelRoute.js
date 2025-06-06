@@ -13,6 +13,11 @@ router
 .get(hostelController.getHostelMapData);  
 
 router
+.route('/student-mapping')
+.post( hostelController.mapStudentToHostel)
+.get( hostelController.getAllMappings);
+
+router
   .route('/:id')
   .get(hostelController.getHostelById)
   .put(upload.array('photos'), hostelController.updateHostel)
@@ -22,6 +27,7 @@ router
 router
 .route('/compare')
 .post(hostelController.compareHostels)
+
 
 
 

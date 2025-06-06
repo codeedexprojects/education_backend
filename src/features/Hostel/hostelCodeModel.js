@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const hostelCodeSchema = new mongoose.Schema(
   {
-    code: {
+    hostelCode: {
       type: String,
       unique: true,
       required: true,

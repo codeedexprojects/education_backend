@@ -2,14 +2,15 @@ const Hostel = require('./hostelModel');
 const Photo = require('./hostelPhotosModel');
 const crypto = require('crypto');
 const HostelCode = require('./hostelCodeModel');
+const StudentMapping = require('./hostelStudentsModel')
 
 
 exports.addHostel = async (data, photoFilenames) => {
   const hostel = await Hostel.create(data);
-  const uniqueCode = `H-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`;
+  const uniqueCode = crypto.randomBytes(3).toString('hex'); 
 
     await HostelCode.create({
-        code:uniqueCode,
+        hostelCode:uniqueCode,
         hostelId:hostel._id
     })
 
@@ -125,4 +126,24 @@ exports.getMapData = async (filters = {}) => {
       lng: h.location.longitude
     }
   }));
+};
+
+exports.mapStudentToHostel = async (studentCode, hostelCode) => {
+  const existing = await StudentMapping.findOne({ studentCode });
+  if (existing) {
+    throw new Error('Student is already mapped to a hostel');
+  }
+  console.log(hostelCode);
+  
+  const hostel = await HostelCode.findOne({ hostelCode: hostelCode });
+  if (!hostel) {
+    throw new Error('Invalid hostel code');
+  }
+
+  const mapping = await StudentMapping.create({ studentCode, hostelCode });
+  return mapping;
+};
+
+exports.getAllStudentMappings = async () => {
+  return await StudentMapping.find().lean();
 };

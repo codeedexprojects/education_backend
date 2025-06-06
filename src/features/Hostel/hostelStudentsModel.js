@@ -2,9 +2,8 @@ const mongoose = require('mongoose');
 
 const studentMappingSchema = new mongoose.Schema(
   {
-    studentId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Student',
+    studentCode: {
+      type: String,
       required: true,
     },
     hostelCode: {
