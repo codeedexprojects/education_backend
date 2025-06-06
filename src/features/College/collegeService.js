@@ -54,15 +54,26 @@ exports.getAllColleges = async (filters = {}) => {
 };
 
 exports.getCollegeById = async (id) => {
-  return await College.findById(id);
+  return await College.findById(id)
+  .populate('programs')
+  .populate('facilities')
 };
 
 exports.updateCollege = async (id, updateData) => {
+  const college = await College.findById(id);
+  if (!college) return null;
 
+  const existingImages = college.images || [];
+  const newImages = updateData.images || [];
 
-  const updatedCollege = await College.findByIdAndUpdate(id, updateData, { new: true });
-  
-  if (!updatedCollege) return null;
+  const mergedImages = [...existingImages, ...newImages];
+
+  updateData.images = mergedImages;
+
+  const updatedCollege = await College.findByIdAndUpdate(id, updateData, {
+    new: true,
+  });
+
   return updatedCollege;
 };
 

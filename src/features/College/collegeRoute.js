@@ -1,18 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const collegeController = require('./collegeController');
+const upload = require('../../middleware/multerConfig');
+
 
 // View all colleges and Add a new college
 router
   .route('/')
   .get(collegeController.getAllColleges)
-  .post(collegeController.addCollege);
+  .post(upload.array('images', 5), collegeController.addCollege);
 
 // Get, Update, and Delete a college by ID
 router
   .route('/:id')
   .get(collegeController.getCollegeById)
-  .patch(collegeController.updateCollege)
+  .put(upload.array('images', 5), collegeController.updateCollege)
   .delete(collegeController.deleteCollege);
 
 // Compare
