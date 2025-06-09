@@ -3,6 +3,7 @@ const PDFDocument = require('pdfkit');
 const Program = require('../Programs/programModel')
 const crypto = require('crypto');
 const StudentCode = require('./studentCodeModel')
+const College = require('../College/collegeModel')
 
 exports.createStudent = async (studentData) => {
   const student = await Student.create(studentData);
@@ -19,11 +20,58 @@ exports.createStudent = async (studentData) => {
   return student;
 };
 
+exports.getAllStudents = async () => {
+  return Student.find()
+    .populate('appliedProgram.collegeId', 'name')
+};
+
+exports.getStudentById = async (id) => {
+  return Student.findById(id)
+    .populate('appliedProgram.collegeId', 'name')
+};
+
+exports.updateStudent = async (id, updateData) => {
+  const student = await Student.findById(id);
+  if (!student) return null;
+
+  // Filter out null/undefined fields from updateData.documents
+  const cleanUpdateDocs = {};
+  if (updateData.documents) {
+    Object.entries(updateData.documents).forEach(([key, value]) => {
+      if (value !== null && value !== undefined && value !== '') {
+        cleanUpdateDocs[key] = value;
+      }
+    });
+  }
+
+  const updatedDocs = {
+    ...student.documents,
+    ...cleanUpdateDocs,
+  };
+
+  updateData.documents = updatedDocs;
+
+  const updated = await Student.findByIdAndUpdate(id, updateData, {
+    new: true,
+  });
+
+  return updated;
+};
+
+
+exports.deleteStudent = async (id) => {
+  const deleted = await Student.findByIdAndDelete(id);
+  if (!deleted) return null;
+
+  await StudentCode.deleteOne({ studentId: id });
+
+  return deleted;
+};
+
 
 exports.generateReceiptPDF = async (studentId) => {
   const student = await Student.findById(studentId)
-    .populate('appliedPrograms.collegeId', 'name')   // populating college name
-    .populate('appliedPrograms.programId', 'name');  // populating program name
+    .populate('appliedProgram.collegeId', 'name');  
 
   if (!student) throw new Error('Student not found');
 
@@ -33,11 +81,9 @@ exports.generateReceiptPDF = async (studentId) => {
   doc.on('data', buffers.push.bind(buffers));
   doc.on('end', () => {});
 
-  // Title
   doc.fontSize(18).text('Admission Receipt', { align: 'center' });
   doc.moveDown();
 
-  // Student Info
   doc.fontSize(12).text(`Name: ${student.firstName} ${student.lastName}`);
   doc.text(`Email: ${student.email}`);
   doc.text(`Phone: ${student.phone}`);
@@ -46,22 +92,21 @@ exports.generateReceiptPDF = async (studentId) => {
   doc.text(`Nationality: ${student.nationality}`);
   doc.moveDown();
 
-  // Admission Programs
-  doc.fontSize(14).text('Applied Programs', { underline: true });
+  doc.fontSize(14).text('Applied Program', { underline: true });
   doc.moveDown(0.5);
 
-  if (student.appliedPrograms.length === 0) {
-    doc.text('No applied programs found.');
+  if (!student.appliedProgram) {
+    doc.text('No applied program found.');
   } else {
-    student.appliedPrograms.forEach((app, index) => {
-      doc.fontSize(12).text(`Program ${index + 1}:`);
-      doc.text(`  College: ${app.collegeId?.name || 'N/A'}`);
-      doc.text(`  Program: ${app.programId?.name || 'N/A'}`);
-      doc.text(`  Academic Year: ${app.academicYear}`);
-      doc.text(`  Status: ${app.status}`);
-      doc.text(`  Applied Date: ${new Date(app.appliedDate).toDateString()}`);
-      doc.moveDown(0.5);
-    });
+    const app = student.appliedProgram;
+
+    doc.fontSize(12).text(`College: ${app.collegeId?.name || 'N/A'}`);
+    doc.text(`Program Name: ${app.programName || 'N/A'}`);
+    doc.text(`Academic Year: ${app.academicYear || 'N/A'}`);
+    doc.text(`Mode of Study: ${app.modeOfStudy || 'N/A'}`);
+    doc.text(`Application Status: ${app.applicationStatus || 'N/A'}`);
+    doc.text(`Applied Date: ${app.appliedDate ? new Date(app.appliedDate).toDateString() : 'N/A'}`);
+    doc.moveDown(0.5);
   }
 
   doc.moveDown();

@@ -31,21 +31,20 @@ const studentSchema = new mongoose.Schema(
 
     tenthPercentage: { type: Number, required: true, min: 0, max: 100 },
     twelfthPercentage: { type: Number, required: true, min: 0, max: 100 },
-    twelfthStream: { type: String, required: true},
+    twelfthStream: { type: String, required: true },
     entranceExam: { type: String, required: true },
     entranceExamScore: { type: Number, required: true },
     graduationPercentage: { type: Number, min: 0, max: 100 },
 
     appliedProgram: {
       collegeId: { type: mongoose.Schema.Types.ObjectId, ref: 'College' },
-      programId: { type: mongoose.Schema.Types.ObjectId, ref: 'Program' },
+      programName: { type: String, required: true },
       academicYear: {
         type: String,
         match: [/^\d{4}-\d{4}$/, 'Academic year must be in YYYY-YYYY format']
       },
       modeOfStudy: {
         type: String,
-        enum: ['Online', 'Offline', 'Hybrid'],
         required: true
       },
       applicationStatus: {
@@ -67,6 +66,7 @@ const studentSchema = new mongoose.Schema(
       enum: ['Pending', 'Paid', 'Failed'],
       default: 'Pending'
     },
+
     documents: {
       tenthMarksheet: { type: String, required: true },
       twelfthMarksheet: { type: String, required: true },
