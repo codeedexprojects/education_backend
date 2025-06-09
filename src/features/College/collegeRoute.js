@@ -14,7 +14,7 @@ router
 router
   .route('/:id')
   .get(collegeController.getCollegeById)
-  .put(upload.array('images', 5), collegeController.updateCollege)
+  .patch(upload.array('images', 5), collegeController.updateCollege)
   .delete(collegeController.deleteCollege);
 
 // Compare
