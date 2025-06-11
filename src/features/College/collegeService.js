@@ -50,7 +50,9 @@ exports.createCollege = async (collegeData) => {
 };
 
 exports.getAllColleges = async (filters = {}) => {
-  return College.find(filters);
+  return College.find(filters)
+  .populate('programs')
+  .populate('facilities')
 };
 
 exports.getCollegeById = async (id) => {
