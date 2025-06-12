@@ -91,42 +91,45 @@ exports.compareHostels = async (hostelIds) => {
 };
 
 exports.getMapData = async (filters = {}) => {
-  
   const hostels = await Hostel.find(filters, {
     name: 1,
-    rent: 1,
+    monthlyRent: 1,
     gender: 1,
     food: 1,
+    foodIncludedInRent: 1,
     safety_rating: 1,
     distance: 1,
+    googleMapsLink: 1,
+    hostelType: 1,
+    amenities: 1,
     'address.street': 1,
     'address.city': 1,
     'address.state': 1,
-    latitude: 1,
-    longitude: 1,
-    'location.latitude': 1,
-    'location.longitude': 1
+    'address.district': 1,
+    'address.country': 1,
   }).lean();
 
-  
   return hostels.map(h => ({
     name: h.name,
-    price: h.rent,
+    monthlyRent: h.monthlyRent,
     gender: h.gender,
     food: h.food,
+    foodIncludedInRent: h.foodIncludedInRent,
     safety_rating: h.safety_rating,
     distance: h.distance,
+    hostelType: h.hostelType,
+    googleMapsLink: h.googleMapsLink,
+    amenities: h.amenities,
     address: {
       street: h.address?.street,
       city: h.address?.city,
+      district: h.address?.district,
       state: h.address?.state,
+      country: h.address?.country,
     },
-    coordinates: {
-      lat: h.location.latitude,
-      lng: h.location.longitude
-    }
   }));
 };
+
 
 exports.mapStudentToHostel = async (studentCode, hostelCode) => {
   const existing = await StudentMapping.findOne({ studentCode });
