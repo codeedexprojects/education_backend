@@ -2,8 +2,14 @@ const collegeService = require('./collegeService');
 const { sendResponse } = require('../../utils/responseHelper');
 
 exports.addCollege = async (req, res, next) => {
-  if (req.files && req.files.length > 0) {
-    req.body.images = req.files.map(file => file.path); // array of paths
+   if (req.files) {
+    if (req.files.logo && req.files.logo.length > 0) {
+      req.body.logo = req.files.logo[0].path;
+    }
+
+    if (req.files.images && req.files.images.length > 0) {
+      req.body.images = req.files.images.map(file => file.path);
+    }
   }
 
   const college = await collegeService.createCollege(req.body);
