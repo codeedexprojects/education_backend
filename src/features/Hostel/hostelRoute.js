@@ -20,7 +20,7 @@ router
 router
   .route('/:id')
   .get(hostelController.getHostelById)
-  .put(upload.array('photos'), hostelController.updateHostel)
+  .patch(upload.array('photos'), hostelController.updateHostel)
   .delete(hostelController.deleteHostel);
 
 
