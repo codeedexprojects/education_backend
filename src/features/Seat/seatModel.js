@@ -25,7 +25,8 @@ const seatSchema = new mongoose.Schema(
     },
     year: {
       type: Number,
-      required: true,
+      default: new Date().getFullYear(), 
+
     },
   },
   { timestamps: true }
