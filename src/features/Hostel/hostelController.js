@@ -50,11 +50,11 @@ exports.compareHostels = async (req, res, next) => {
 };
 
 exports.getHostelMapData = async (req, res, next) => {  
-  const { rent, gender, food, safety_rating, distance } = req.query;
+  const { monthlyRent, gender, food, safety_rating, distance } = req.query;
 
   const filters = {};
 
-  if (rent) filters.rent = { $lte: Number(rent) };
+  if (monthlyRent) filters.monthlyRent = { $lte: Number(monthlyRent) };
   if (gender) filters.gender = gender;
   if (food) filters.food = food;
   if (safety_rating) filters.safety_rating = { $gte: Number(safety_rating) };

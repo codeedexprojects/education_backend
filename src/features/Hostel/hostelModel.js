@@ -15,10 +15,14 @@ const hostelSchema = new mongoose.Schema(
       country: { type: String, required: true },
       postalCode: { type: String, required: true },
     },
-    rent: {
+    monthlyRent: {
       type: Number,
       required: true,
       index: true,
+    },
+    securityDeposit: {
+      type: Number,
+      default: 0,
     },
     gender: {
       type: String,
@@ -32,6 +36,10 @@ const hostelSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
+    foodIncludedInRent: {
+      type: Boolean,
+      default: false,
+    },
     safety_rating: {
       type: Number,
       min: 1,
@@ -39,15 +47,42 @@ const hostelSchema = new mongoose.Schema(
       default: 3,
       index: true,
     },
-    location: {
-      latitude: { type: Number, required: true, index: true },
-      longitude: { type: Number, required: true, index: true },
+    googleMapsLink: {
+      type: String,
+      required: true,
+      trim: true,
     },
     distance: {
       type: Number, 
       required: true,
       index: true
     },
+    description: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    ownerName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    ownerPhone: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    hostelType: {
+      type: String,
+      enum: ['Dormitory', 'Single Room', 'Shared Room', 'PG'],
+      required: true,
+    },
+    amenities: [
+      {
+        type: String,
+        trim: true,
+      }
+    ],
     contact: {
       phone: {
         type: String,
