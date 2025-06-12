@@ -31,7 +31,7 @@ app.use('/programs', programRoutes)
 app.use('/facilities', facilityRoute)
 app.use('/admissions', admissionRoutes)
 
-app.use('/hostel-registration', hostelRegistrationRoutes)
+app.use('/hostel-registrations', hostelRegistrationRoutes)
 
 
 // Unknown Routes
