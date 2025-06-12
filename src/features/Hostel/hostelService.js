@@ -69,26 +69,32 @@ exports.deleteHostel = async (id) => {
   return hostel;
 };
 
-exports.compareHostels = async (hostelIds) => {
 
+exports.compareHostels = async (hostelIds) => {
   const hostels = await Hostel.find({ _id: { $in: hostelIds } }).lean();
   const hostelPhotos = await Photo.find({ hostelId: { $in: hostelIds } }).lean();
 
   return hostels.map((hostel) => ({
     id: hostel._id,
     name: hostel.name,
-    rent: hostel.rent,
+    monthlyRent: hostel.monthlyRent,
+    securityDeposit: hostel.securityDeposit,
     rating: hostel.safety_rating,
     food: hostel.food,
+    foodIncludedInRent: hostel.foodIncludedInRent,
     gender: hostel.gender,
-    distance: hostel.distance || null, 
+    distance: hostel.distance,
+    hostelType: hostel.hostelType,
+    amenities: hostel.amenities,
+    googleMapsLink: hostel.googleMapsLink,
     address: `${hostel.address.street}, ${hostel.address.city}, ${hostel.address.state}`,
-    location: hostel.location,
+    description: hostel.description,
     photos: hostelPhotos
       .filter(p => p.hostelId.toString() === hostel._id.toString())
       .map(p => p.url),
   }));
 };
+
 
 exports.getMapData = async (filters = {}) => {
   const hostels = await Hostel.find(filters, {
