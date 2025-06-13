@@ -20,10 +20,39 @@ exports.createStudent = async (studentData) => {
   return student;
 };
 
-exports.getAllStudents = async () => {
-  return Student.find()
-    .populate('appliedProgram.collegeId', 'name')
+
+exports.getAllStudents = async (filters = {}) => {
+  const query = {};
+
+
+  if (filters.program && filters.program !== 'all') {
+    query['appliedProgram.programId'] = filters.program;
+  }
+
+  if (filters.applicationStatus && filters.applicationStatus !== 'all') {
+    query['appliedProgram.applicationStatus'] = filters.applicationStatus;
+  }
+
+  if (filters.paymentStatus && filters.paymentStatus !== 'all') {
+    query['paymentStatus'] = filters.paymentStatus;
+  }
+
+  let students = await Student.find(query)
+    .populate('appliedProgram.collegeId', 'name type')
+    .lean();
+
+  
+  if (filters.collegeType && filters.collegeType !== 'all') {
+    students = students.filter(
+      (s) => s.appliedProgram.collegeId?.type === filters.collegeType      
+    );
+  }
+
+
+  return students;
 };
+
+
 
 exports.getStudentById = async (id) => {
   return Student.findById(id)
