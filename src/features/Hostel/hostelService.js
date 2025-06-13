@@ -3,6 +3,8 @@ const Photo = require('./hostelPhotosModel');
 const crypto = require('crypto');
 const HostelCode = require('./hostelCodeModel');
 const StudentMapping = require('./hostelStudentsModel')
+const StudentCode = require('../Admission/studentCodeModel')
+const Student = require('../Admission/studentModel')
 
 
 exports.addHostel = async (data, photoFilenames) => {
@@ -153,6 +155,21 @@ exports.mapStudentToHostel = async (studentCode, hostelCode) => {
   return mapping;
 };
 
+
 exports.getAllStudentMappings = async () => {
-  return await StudentMapping.find().lean();
+  const mappings = await StudentMapping.find()
+    .populate('studentId', 'firstName lastName email')
+    .populate('hostelId', 'name')
+    .lean();
+
+  return mappings.map(m => ({
+    student: `${m.studentId.firstName} ${m.studentId.lastName}`,
+    email: m.studentId.email,
+    hostel: m.hostelId.name,
+    hostelCode: m.hostelCode,
+    room: m.room,
+    joinedOn: m.joinedOn,
+  }));
 };
+
+
