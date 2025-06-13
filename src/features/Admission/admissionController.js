@@ -19,10 +19,20 @@ exports.createStudentAdmission = async (req, res, next) => {
   return sendResponse(res, 201, 'Student admission created successfully', student);
 };
 
-exports.getAllStudents = async (req, res, next) => {
-  const students = await admissionService.getAllStudents();
+exports.getAllStudents = async (req, res) => {
+  const { collegeType, program, applicationStatus, paymentStatus } = req.query;
+  
+  const filters = {
+    collegeType,
+    program,
+    applicationStatus,
+    paymentStatus
+  };
+
+  const students = await admissionService.getAllStudents(filters);
   return sendResponse(res, 200, 'All students retrieved', students);
 };
+
 
 exports.getStudentById = async (req, res, next) => {
   const student = await admissionService.getStudentById(req.params.id);

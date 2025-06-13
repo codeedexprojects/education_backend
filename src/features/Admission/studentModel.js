@@ -39,6 +39,7 @@ const studentSchema = new mongoose.Schema(
     appliedProgram: {
       collegeId: { type: mongoose.Schema.Types.ObjectId, ref: 'College' },
       programName: { type: String, required: true },
+      programId:{type: mongoose.Schema.Types.ObjectId, ref: 'Program'},
       academicYear: {
         type: String,
         match: [/^\d{4}-\d{4}$/, 'Academic year must be in YYYY-YYYY format']
@@ -46,16 +47,16 @@ const studentSchema = new mongoose.Schema(
       modeOfStudy: {
         type: String,
         required: true
-      },
-      applicationStatus: {
+      }
+    },
+    applicationStatus: {
         type: String,
         enum: ['Applied', 'Admitted', 'Rejected', 'Cancelled'],
         default: 'Applied'
-      },
-      appliedDate: {
+    },
+    appliedDate: {
         type: Date,
         default: Date.now
-      }
     },
     paymentMethod: {
       type: String,
